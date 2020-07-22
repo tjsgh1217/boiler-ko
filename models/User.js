@@ -12,7 +12,7 @@ const userschema = mongoose.Schema({
         unique: 1
     },
     password: {
-        type:String,
+        type: String,
         minlength: 5
     },
     lastname: {
@@ -32,6 +32,6 @@ const userschema = mongoose.Schema({
     }
 })
 
-const user = mongoose.model('user',userschema)
+const User = mongoose.model('user',userschema)
 
-module.exports = { user }
+module.exports = { User }
