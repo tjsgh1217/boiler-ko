@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 const port = 1217
 const bodyParser = require('body-parser');
+
+const config = require('./config/key');
+
 const { User } = require("./models/User");
 
 //application/x--www-form-urlencoded
@@ -12,14 +15,14 @@ app.use(bodyParser.json());
 
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb+srv://seonho:a382214160@boilerplate.cas3u.mongodb.net/test?retryWrites=true&w=majority', {
+mongoose.connect(config.mongoURI, {
     useNewurlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
 }) .then(() => console.log('MongoDB Connected...') )
     .catch(err => console.log(err))
 
 
 
-    app.get('/', (req, res) => res.send('Hello World!'))
+    app.get('/', (req, res) => res.send('ㅎㅏ이하이하이하이하이'))
 
     app.post('/register', (req, res) => {
 
