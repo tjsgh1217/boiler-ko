@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 1217
 const bodyParser = require('body-parser');
-
+const cookieParser = require('cookie-parser');
 const config = require('./config/key');
 
 const { User } = require("./models/User");
@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 //app
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 
 const mongoose = require('mongoose')
@@ -32,13 +33,47 @@ mongoose.connect(config.mongoURI, {
         const user = new User(req.body)
 
         user.save((err, userInfo) => {
-            if(err) return res.json({ sucess: false, err})
+            if(err) return res.json({ success: false, err})
             return res.status(200).json({
-                sucess: true
+                success: true
             })
             
         })
     })
+
+    app.post('/login', (req, res) => {
+
+        //이메일 search
+        User.findOne({ email: req.body.email }, (err, user) => {
+            if(!user) {
+                return res.json({
+                    loginSuccess: false,
+                    message: "제공된 이메일에 해당되는 유저가 없음"
+                })
+            }
+         
+        //이메일 데이터 베이스 존재 --> 비밀번호 확인
+
+        user.comparePassword(req.body.password , (err, isMatch ) => {
+            if(!isMatch)
+            return res.json({ loginSuccess: false, message : "비번 틀림" })
+
+        
+        //비밀번호 correct --> token 생성
+        user.generateToken((err, user) => {
+            if (err) return res.status(400).send(err);
+
+            //  토큰을 저장한다. where? 쿠키, 로컬스트뤼쥐
+            res.cookie("x_auth", user.token)
+            .status(200)
+            .json({ loginSuccess: true, userId: user._id })
+
+            })
+        })
+   
+    })
+
+})
 
 
     app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
