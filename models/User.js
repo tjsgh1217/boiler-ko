@@ -59,7 +59,7 @@ userSchema.methods.comparePassword = function(plainpassword, cb) {
 
     //plainPassword 1234567      암호화된 비번:$2b$10$EXZvSmrW2GCJElr6WjHPhOyTwO6WFoXtqsl3QsdracWZSxtXby7tG
     bcrypt.compare(plainpassword, this.password, function(err, isMatch) {
-        if(err) return cb(err),
+        if(err) return cb(err);
         cb(null, isMatch) 
     })
 }
@@ -81,6 +81,22 @@ userSchema.methods.generateToken = function (cb) {
         if(err) return cb(err)
         cb(null, user)
     })
+
+}
+
+userSchema.statics.findByToken = function(token, cb) {
+    var user = this;
+
+    //  토큰을 decode 한다.
+    jwt.verify(token, 'secretToken', function (err, decoded) {
+        //  유저 아이디를 이용해서 유저를 찾고
+        //  클라이언트에서 가져온 token과 db에 보관된 일치 확인
+
+        user.findOne({ "_id": decoded, "token": token}, function (err, use) {
+            if (err) return cb(err);
+            cb(null, user)
+        })
+     })
 
 }
 
