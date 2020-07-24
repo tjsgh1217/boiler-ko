@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema({
         type: String,
         maxlength: 50
     },
+
     email: {
         type: String,
         trim: true,
@@ -23,14 +24,14 @@ const userSchema = mongoose.Schema({
         maxlength: 50
     },
     role: {
-        type: String,
+        type: Number,
         default: 0
     },
         image: String,
-    tocken: {
+    token: {
          type: String
         },
-    tockenexp: {
+    tokenExp: {
         type: Number
     }
 })
@@ -78,7 +79,7 @@ userSchema.methods.generateToken = function (cb) {
 
     user.token = token
     user.save(function(err, user) {
-        if(err) return cb(err)
+        if(err) return cb(err);
         cb(null, user)
     })
 

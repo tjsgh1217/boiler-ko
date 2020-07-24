@@ -23,7 +23,7 @@ mongoose.connect(config.mongoURI, {
 
 
 
-    app.get('/', (req, res) => res.send('ㅎㅏ이하이하이하이하이'))
+    app.get('/', (req, res) => res.send('요한이 바보'))
 
     app.post('/api/users/register', (req, res) => {
 
@@ -41,7 +41,7 @@ mongoose.connect(config.mongoURI, {
         })
     })
 
-    app.post('/login', (req, res) => {
+    app.post('/api/users/login', (req, res) => {
 
         //이메일 search
         User.findOne({ email: req.body.email }, (err, user) => {
