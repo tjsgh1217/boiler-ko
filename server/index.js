@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 1217
+const port = 5000
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const config = require('./config/key');
